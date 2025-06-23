@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Simple Calculator with TDD</title>
+</head>
+<body>
+	<!--
+	********************************************** 
+	Refactoring with UI
+	**********************************************
+	-->
+	<div align="center">
+		<h1 id="idHTag">Simple Calculator with TDD</h1>
+	</div>
+</body>
+<script>
+
+	var hTag = document.getElementById("idHTag");
+
+	// ********************************************** 
+	// Green Testing (Functional Program)
+	// **********************************************
+
+	function add(input) {
+		if(input == "") { // Test 1: Passed
+			input = 0;
+			return input;
+		} else if(input.length == 1) { // Test 2: Passed
+			return parseInt(input);
+		} else {
+			if(input.startsWith("//")) { 
+				var delimiter = input.split("\n");
+				var splittedNumStrs = delimiter[1].split(input.slice(2, input.indexOf("\n")));
+				var sum = splittedNumStrs.map(Number); // reduce((a,b) => a+b, 0);
+				for(var count=0; count<sum.length; count++) {
+					if(sum[count] < 0) {
+						throw new Error("negative numbers not allowed " + sum[count]);
+					} else {
+						sum = sum.reduce((a,b) => a+b, 0);
+					}
+				}
+				return sum;
+			} else {
+				var delimiter;
+				var splittedNumStrs;
+
+				if(input == "\n") {
+					delimiter = input.split("\n");
+					splittedNumStrs = delimiter[1].split(input.slice(2, input.indexOf("\n")));
+				} else {
+					delimiter = input;
+					splittedNumStrs = delimiter.split(",");
+				}
+				var sum = splittedNumStrs.map(Number).reduce((a,b) => a+b, 0);
+				return sum;
+			}
+		}
+	}
+
+	window.onload = function() {
+
+		// ********************************************** 
+		// Red Testing (Test Cases)
+		// **********************************************
+
+		// Test 1: Passed
+		// var sum = add("");
+		// hTag.innerHTML = sum;
+
+		// Test 2: Passed
+		// var sum = add("1");
+		// hTag.innerHTML = sum;
+		
+		// Test 3: Passed
+		// var sum = add("1, 5");
+		// hTag.innerHTML = sum;
+
+		// Test 4: Passed
+		// var sum = add("//;\n1;2;3;4");	
+		// hTag.innerHTML = sum;
+
+		// Test 5: Passed (Note: For this, please open developer options and console on browser for viewing the thrown exception)
+		// var sum = add("//;\n-1;-2;-3;-4");	
+		// hTag.innerHTML = sum;
+	}
+	
+</script>
+</html>
